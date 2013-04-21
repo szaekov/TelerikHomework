@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DOM Manipulation - DIV in circular</title>
+</head>
+<body>
+    <style>
+      .circle{
+        width: 400px;
+        height: 400px;
+        border-radius: 50%;
+        border: 1px solid #000;
+        margin: 100px auto 100px auto;
+      }
+    </style>
+    <div class="circle">
+    </div>
+    <div id="content">
+    </div>
+    <a href="#" id="btn-stop" onclick="onStopButtonClick(event)">Stop</a>
+    <script>
+        function onStart(step) {
+            var contentDiv = document.getElementById("content");
+            var degree = step + 20;
+            var radius = 200;
+            for (var i = 1; i <= 5; i++) {
+                var div = document.createElement("div");
+                div.id = "circle" + i;
+                contentDiv.appendChild(div);
+                DrawDiv(div, i, degree, radius);
+            }
+
+            return step + 1;
+        }
+
+        function getPoint(radius, angle) {
+            var radian = angle * Math.PI / 180;
+            return {
+                x: Math.floor(Math.cos(radian) * radius),
+                y: Math.floor(Math.sin(radian) * radius)
+            };
+        }
+
+        function DrawDiv(divElement, index, degree, radius, step) {
+            var height = (screen.height / 2) - 50;
+            var width = (screen.width /2) - 25;
+            var point = getPoint(radius, index * degree);
+            var offset = {
+                top: point.y + height,
+                left: point.x + width
+            };
+
+            var color = "#f00";
+            switch (index) {
+                case 1:
+                    color = "#f00";
+                    break;
+                case 2:
+                    color = "#ffd800";
+                    break;
+                case 3:
+                    color = "#4cff00";
+                    break;
+                    break;
+                case 4:
+                    color = "#0094ff";
+                    break;
+                case 5:
+                    color = "#ff00dc";
+                    break;
+                default:
+                    break;
+            }
+
+            var divId = document.getElementById(divElement.id);
+            divId.style.position = "fixed";
+            divId.style.left = offset.left + "px";
+            divId.style.bottom = offset.top + "px";
+            divId.style.width = "50px";
+            divId.style.height = "50px";
+            divId.style.borderRadius = "50%";
+            divId.style.border = "1px solid #000";
+            divId.style.backgroundColor = color;
+        }
+
+        var step = 0;
+        timer = setInterval(function () {
+            step = onStart(step);
+        }, 100);
+
+        function onStopButtonClick(e) {
+            if (!e) e = window.event;
+
+            clearInterval(timer);
+            document.getElementById("btn-stop").disabled = true;
+
+            if (e.preventDefault) {
+                e.preventDefault();
+            }
+            return false;
+        }
+
+  </script>
+</body>
+</html>
